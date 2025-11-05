@@ -1,0 +1,44 @@
+version: "3.11"
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    build: ./web
+    container_name: web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./web:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ai
+      - db
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=mysite.settings
+
+
+
+  ai:
+    build: ./ai
+    container_name: ai
+    #command: python main.py
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./ai:/app
+    env_file:
+      - .env
+
+volumes:
+  db_data:

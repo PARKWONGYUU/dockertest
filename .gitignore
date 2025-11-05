@@ -207,3 +207,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+# Docker
+*.pid
+*.log
+*.bak
+*.swp
+docker-compose.override.yml
